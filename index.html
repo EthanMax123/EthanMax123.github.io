@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credontis - Exceptional Talent, Exceptional Firms</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Scroll reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Staggered animations */
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #ffa500, #ff8c00);
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 34, 56, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(26, 34, 56, 0.98);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-logo::before {
+            content: '';
+            width: 32px;
+            height: 32px;
+            margin-right: 10px;
+            background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .nav-logo::after {
+            content: 'C';
+            position: absolute;
+            color: white;
+            font-weight: 900;
+            font-size: 18px;
+            margin-right: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffa500;
+        }
+
+        .nav-cta {
+            background: #ffa500;
+            color: #1a2238;
+            padding: 8px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: #ff8c00;
+            transform: translateY(-1px);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 2px 0;
+            transition: 0.3s;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a2238 0%, #2d3e5f 100%);
+            color: white;
+            padding: 180px 0 160px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="60" cy="20" r="1" fill="rgba(255,165,0,0.2)"/><circle cx="10" cy="60" r="1.5" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, #f8f9fa);
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ffa500;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.95;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: #ffa500;
+            color: #1a2238;
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #ff8c00;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 165, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #1a2238;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 40px;
+            opacity: 0.9;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffa500;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 120px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            position: relative;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1a2238;
+            line-height: 1.3;
+        }
+
+        .about-text p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ffa500, #ff8c00);
+            color: white;
+            padding: 35px;
+            border-radius: 16px;
+            margin: 35px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(255, 165, 0, 0.2);
+        }
+
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .problem-solution {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .problem-box, .solution-box {
+            padding: 30px;
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .problem-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-left: 4px solid #dc3545;
+        }
+
+        .solution-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            border-left: 4px solid #28a745;
+        }
+
+        .problem-box h4, .solution-box h4 {
+            color: #1a2238;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .problem-box p, .solution-box p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .about-visual {
+            position: relative;
+        }
+
+        .visual-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .visual-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .visual-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffa500, #ff8c00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        /* Why Credontis Section */
+        .why-section {
+            padding: 120px 0;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 70%, rgba(255, 165, 0, 0.05) 0%, transparent 50%);
+            transform: scale(0);
+            transition: transform 2s ease;
+        }
+
+        .why-section.animate::before {
+            transform: scale(1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a2238;
+            position: relative;
+        }
+
+        .process-section .section-title {
+            color: white;
+            font-size: 3rem;
+        }
+
+        .process-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .connect-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #ffa500, #ff8c00);
+            display: block;
+            margin: 30px auto;
+            border-radius: 2px;
+            transform: scaleX(0);
+            transition: transform 1s ease;
+        }
+
+        .section-title.animate::after {
+            transform: scaleX(1);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 60px;
+            line-height: 1.6;
+        }
+
+        .why-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+            margin-top: 80px;
+        }
+
+        .why-text {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: #555;
+        }
+
+        .why-text p {
+            margin-bottom: 25px;
+        }
+
+        .why-text .highlight {
+            color: #1a2238;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 35px;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,165,0,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-color: #ffa500;
+            background: white;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 28px;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-icon.blue { 
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+        .feature-icon.green { 
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
+        }
+        .feature-icon.purple { 
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            box-shadow: 0 8px 20px rgba(155, 89, 182, 0.3);
+        }
+        .feature-icon.orange { 
+            background: linear-gradient(135deg, #ffa500, #ff8c00);
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.3);
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a2238;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Process Section */
+        .process-section {
+            padding: 120px 0;
+            background: linear-gradient(135deg, #1a2238 0%, #2d3e5f 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.05)"/><circle cx="60" cy="20" r="1" fill="rgba(255,165,0,0.1)"/><circle cx="10" cy="60" r="1.5" fill="rgba(255,255,255,0.03)"/></svg>');
+            opacity: 0.4;
+            animation: float 30s ease-in-out infinite;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-top: 80px;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px 25px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .process-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ffa500, #ff8c00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 auto 25px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.3);
+        }
+
+        .process-step::after {
+            content: '→';
+            position: absolute;
+            top: 75px;
+            right: -20px;
+            font-size: 2rem;
+            color: rgba(255, 165, 0, 0.6);
+            z-index: 1;
+            font-weight: bold;
+        }
+
+        .process-step:last-child::after {
+            display: none;
+        }
+
+        .process-step h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #ffa500;
+            font-weight: 600;
+        }
+
+        .process-step p {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.95;
+            color: white;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 120px 0;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10%;
+            width: 30%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(255, 165, 0, 0.05) 0%, transparent 70%);
+            transform: translateY(-50%) scale(0);
+            transition: transform 2s ease;
+        }
+
+        .testimonials-section.animate::before {
+            transform: translateY(-50%) scale(1);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 80px;
+        }
+
+        .testimonial-card {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 16px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            font-size: 4rem;
+            color: #ffa500;
+            font-weight: bold;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            color: #555;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffa500, #ff8c00);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .author-info h4 {
+            color: #1a2238;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Connect Section */
+        .connect-section {
+            background: linear-gradient(135deg, #1a2238 0%, #2d3e5f 100%);
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .connect-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 165, 0, 0.1) 0%, transparent 50%);
+            transform: scale(0);
+            transition: transform 2s ease;
+        }
+
+        .connect-section.animate::before {
+            transform: scale(2);
+        }
+
+        .connect-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .connect-description {
+            font-size: 1.3rem;
+            margin-bottom: 50px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: #ffa500;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #ffa500;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            color: #888;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .why-content {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            .process-step::after {
+                display: none;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title, .hero-subtitle {
+                font-size: 2.8rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .connect-title {
+                font-size: 1.8rem;
+            }
+
+            .header {
+                padding: 140px 0 120px;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 20px;
+            transform: translateY(100px);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            background: #ff8c00;
+            transform: translateY(-2px) scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">Credontis</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#testimonials">Success Stories</a></li>
+            </ul>
+            <a href="#contact" class="nav-cta">Get Started</a>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="header" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title reveal stagger-1">Exceptional Talent.</h1>
+                <h2 class="hero-subtitle reveal stagger-2">Exceptional Firms.</h2>
+                <p class="hero-description reveal stagger-3">
+                    We connect overlooked, high-potential candidates with elite systematic trading firms. 
+                    Bridging the gap between hidden talent and exclusive opportunities in quantitative finance.
+                </p>
+                <div class="cta-buttons reveal stagger-4">
+                    <a href="#contact" class="btn btn-primary">For Firms →</a>
+                    <a href="https://tally.so/r/nGPlOZ" class="btn btn-secondary" target="_blank">For Talent</a>
+                </div>
+                <div class="hero-stats reveal stagger-5">
+                    <div class="stat">
+                        <span class="stat-number">150+</span>
+                        <span class="stat-label">Successful Placements</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Partner Firms</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Retention Rate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="reveal-left">Redefining Talent Acquisition in Quantitative Finance</h2>
+                    <p class="reveal-left stagger-2">The systematic trading industry has a fundamental recruiting problem. Elite firms with extraordinary opportunities remain intentionally invisible, while exceptional candidates with the exact skills these firms need never cross paths with them.</p>
+                    
+                    <div class="problem-solution reveal-left stagger-3">
+                        <div class="problem-box">
+                            <h4>The Problem</h4>
+                            <p>Traditional recruiting fails in systematic trading. Top firms don't advertise roles publicly, and the most capable candidates aren't actively job searching. This creates a massive blind spot in the market.</p>
+                        </div>
+                        <div class="solution-box">
+                            <h4>Our Solution</h4>
+                            <p>We operate within the systematic trading ecosystem, maintaining relationships with both elite firms and exceptional talent pools that others never access.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight-box reveal-left stagger-4">
+                        <p><strong>We bridge this critical gap.</strong> Our insider knowledge of the systematic trading landscape allows us to identify exceptional talent that others overlook and connect them with elite firms seeking exactly their skill set. We don't just fill positions — we create career-defining opportunities.</p>
+                    </div>
+                    <p class="reveal-left stagger-5">Founded by industry veterans who understand the unique demands of quantitative finance, Credontis operates with the precision, discretion, and deep market knowledge that this specialized field requires.</p>
+                </div>
+                <div class="about-visual">
+                    <div class="visual-card reveal-scale">
+                        <div class="visual-icon">🎯</div>
+                        <h3>Precision Matching</h3>
+                        <p>We don't just match resumes to job descriptions. We understand the nuanced requirements of systematic trading roles and identify candidates whose potential may not be immediately apparent to traditional recruiters.</p>
+                        <br>
+                        <p><strong>Our approach:</strong> Deep technical assessment, cultural fit analysis, and long-term career trajectory alignment ensure every placement is a strategic win for both parties.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Credontis Section -->
+    <section class="why-section" id="why">
+        <div class="container">
+            <h2 class="section-title reveal">Why Credontis?</h2>
+            <p class="section-subtitle reveal stagger-1">
+                We solve the recruiting challenges that have long plagued the systematic trading industry
+            </p>
+            
+            <div class="why-content">
+                <div class="why-text">
+                    <p class="reveal-left stagger-2">Credontis was founded by someone from within the systematic trading world who saw a recurring problem:</p>
+                    
+                    <p class="highlight reveal-left stagger-3">There are exceptional funds that stay intentionally under the radar and exceptional people who never find them.</p>
+                    
+                    <p class="reveal-left stagger-4">Many of these firms offer incredible opportunities, but they don't show up on campus, on LinkedIn, or in flashy media. And many of the most capable candidates aren't job hunting, or don't know what they're missing.</p>
+                    
+                    <p class="highlight reveal-left stagger-5">That's where we come in.</p>
+
+                    <p class="reveal-left stagger-6">We've built relationships with both sides of this equation. We know which firms are expanding their teams, what they're really looking for beyond the job posting, and we've identified talent pools that others ignore.</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card reveal-right stagger-2">
+                        <div class="feature-icon blue">🏢</div>
+                        <h3 class="feature-title">Elite Firms</h3>
+                        <p class="feature-description">Top-performing systematic trading companies that value discretion and excellence</p>
+                    </div>
+                    
+                    <div class="feature-card reveal-right stagger-3">
+                        <div class="feature-icon green">👥</div>
+                        <h3 class="feature-title">Hidden Talent</h3>
+                        <p class="feature-description">Exceptional candidates overlooked by traditional recruiting methods</p>
+                    </div>
+                    
+                    <div class="feature-card reveal-right stagger-4">
+                        <div class="feature-icon purple">🎯</div>
+                        <h3 class="feature-title">Expert Matching</h3>
+                        <p class="feature-description">Deep industry knowledge enables precise candidate-firm alignment</p>
+                    </div>
+                    
+                    <div class="feature-card reveal-right stagger-5">
+                        <div class="feature-icon orange">📈</div>
+                        <h3 class="feature-title">Proven Results</h3>
+                        <p class="feature-description">Consistent successful placements with high retention rates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section" id="process">
+        <div class="container">
+            <h2 class="section-title reveal">Our Process</h2>
+            <p class="section-subtitle reveal stagger-1">
+                A systematic approach to connecting exceptional talent with exceptional opportunities
+            </p>
+            
+            <div class="process-steps">
+                <div class="process-step reveal stagger-2">
+                    <div class="process-number">1</div>
+                    <h3>Discovery</h3>
+                    <p>Deep assessment of technical capabilities, career goals, and cultural fit beyond traditional interviews.</p>
+                </div>
+                
+                <div class="process-step reveal stagger-3">
+                    <div class="process-number">2</div>
+                    <h3>Intelligence</h3>
+                    <p>Leverage our exclusive network and market intelligence to identify perfect-fit opportunities.</p>
+                </div>
+                
+                <div class="process-step reveal stagger-4">
+                    <div class="process-number">3</div>
+                    <h3>Connection</h3>
+                    <p>Strategic introductions between pre-qualified candidates and carefully selected firms.</p>
+                </div>
+                
+                <div class="process-step reveal stagger-5">
+                    <div class="process-number">4</div>
+                    <h3>Success</h3>
+                    <p>Ongoing support through integration to ensure long-term success for all parties.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="container">
+            <h2 class="section-title reveal">Success Stories</h2>
+            <p class="section-subtitle reveal stagger-1">
+                Hear from candidates and firms who've experienced the Credontis difference
+            </p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card reveal stagger-2">
+                    <p class="testimonial-text">
+                        Credontis connected me with a role I never would have found on my own. The firm was exactly what I was looking for, but they don't recruit publicly. The process was seamless and professional.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info">
+                            <h4>Alex C.</h4>
+                            <p>Quantitative Developer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card reveal stagger-3">
+                    <p class="testimonial-text">
+                        We've tried other recruiters, but they just don't understand our space. Credontis gets it. They present candidates who actually fit our culture and technical requirements.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">S</div>
+                        <div class="author-info">
+                            <h4>Sarah M.</h4>
+                            <p>Head of Talent, Elite Trading Firm</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card reveal stagger-4">
+                    <p class="testimonial-text">
+                        The level of insight Credontis has into our industry is remarkable. They understood our unique requirements immediately and delivered candidates that were perfect cultural and technical fits. A true partner in our growth.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">R</div>
+                        <div class="author-info">
+                            <h4>Rachel K.</h4>
+                            <p>CTO, Quantitative Fund</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connect Section -->
+    <section class="connect-section" id="contact">
+        <div class="container">
+            <h2 class="connect-title reveal">Let's Connect</h2>
+            <p class="connect-description reveal stagger-1">
+                Whether you're looking to hire exceptional talent or seeking your next career opportunity, 
+                we're here to make the connection that changes everything.
+            </p>
+            <div class="cta-buttons reveal stagger-2">
+                <a href="mailto:firms@credontis.com" class="btn btn-primary">I'm Hiring Talent →</a>
+                <a href="https://tally.so/r/nGPlOZ" class="btn btn-secondary" target="_blank">I'm Looking for Work</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section reveal-left stagger-1">
+                    <h3>Credontis</h3>
+                    <p>Connecting exceptional talent with exceptional firms in systematic trading and quantitative finance.</p>
+                </div>
+                <div class="footer-section reveal-left stagger-2">
+                    <h3>For Firms</h3>
+                    <p><a href="mailto:firms@credontis.com">firms@credontis.com</a></p>
+                    <p>Access our curated talent network</p>
+                </div>
+                <div class="footer-section reveal-left stagger-3">
+                    <h3>For Talent</h3>
+                    <p><a href="mailto:talent@credontis.com">talent@credontis.com</a></p>
+                    <p>Discover hidden opportunities</p>
+                </div>
+                <div class="footer-section reveal-left stagger-4">
+                    <h3>Connect</h3>
+                    <p><a href="mailto:hello@credontis.com">hello@credontis.com</a></p>
+                    <p>General inquiries</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Credontis. All rights reserved. | Connecting exceptional talent with exceptional firms.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <button class="scroll-top" id="scrollTop">↑</button>
+
+    <script>
+        // Scroll Progress Bar
+        function updateScrollProgress() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+        }
+
+        // Reveal Animation Observer
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Add animate class to parent sections for background effects
+                    const section = entry.target.closest('section');
+                    if (section) {
+                        section.classList.add('animate');
+                    }
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        });
+
+        // Observe all reveal elements
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .section-title').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            updateScrollProgress();
+        });
+
+        // Scroll to top button
+        const scrollTopBtn = document.getElementById('scrollTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.header');
+            const parallax = scrolled * 0.5;
+            
+            if (header) {
+                header.style.transform = `translateY(${parallax}px)`;
+            }
+        });
+
+        // Initialize animations on page load
+        window.addEventListener('load', function() {
+            // Trigger initial animations for elements in view
+            document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    el.classList.add('active');
+                }
+            });
+        });
+
+        // Enhanced scroll animations with throttling
+        let ticking = false;
+        
+        function updateAnimations() {
+            // Additional smooth animations can be added here
+            ticking = false;
+        }
+        
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                requestAnimationFrame(updateAnimations);
+                ticking = true;
+            }
+        });
+    </script>
+</body>
+</html>size: 2.2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero-description {
+                font-size: 1.1rem;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title, .hero-subtitle {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .connect-title {
+                font-
